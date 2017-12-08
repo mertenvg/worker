@@ -1,15 +1,15 @@
 package main
 
 import (
-	"fmt"
+	"log"
 	"time"
 
-	"github.com/alphacentaurigames/conquest-alpha-go/lib/worker"
+	"github.com/whitecypher/worker"
 )
 
 func doStuff(work interface{}) {
-	fmt.Println(work.(int))
-	time.Sleep(time.Millisecond * 10)
+	//fmt.Println(work.(int))
+	time.Sleep(time.Millisecond * 100)
 }
 
 func main() {
@@ -18,13 +18,17 @@ func main() {
 		worker.WithLimits(5, 1, 1000),
 		worker.WithAutoScale(time.Second, 5),
 		worker.WithCheckInterval(time.Second),
+		worker.WithLogFunc(log.Printf),
 	)
 
-	for {
-		for i := 0; i < 10000; i++ {
-			p.Queue(i)
-		}
-
-		time.Sleep(time.Second * 10)
+	work := make([]interface{}, 0)
+	for w := 0; w < 100; w++ {
+		work = append(work, w)
 	}
+
+	for i := 0; i < 100; i = i + 10 {
+		p.Queue(work...)
+	}
+
+	p.Stop()
 }

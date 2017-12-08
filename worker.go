@@ -246,10 +246,10 @@ func (p *Pool) Stop() {
 	p.closing = true
 	if p.QueueWaitingCount() > 0 {
 		for i := 0; i < 30; i++ {
-			p.conf.Log("Waiting %s for queue to empty...", time.Duration(int(time.Second)*(30-i)))
 			if p.QueueWaitingCount() == 0 {
 				break
 			}
+			p.conf.Log("%v items still in the queue. Waiting %s for queue to empty...", p.QueueWaitingCount(), time.Duration(int(time.Second)*(30-i)))
 			time.Sleep(time.Second)
 		}
 	}
