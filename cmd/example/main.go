@@ -4,7 +4,7 @@ import (
 	"log"
 	"time"
 
-	"github.com/whitecypher/worker"
+	"github.com/mertenvg/worker"
 )
 
 func doStuff(work interface{}) {
